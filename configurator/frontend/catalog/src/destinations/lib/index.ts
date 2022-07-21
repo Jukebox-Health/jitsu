@@ -9,6 +9,7 @@ import facebookDestination from "./facebook"
 import googleAnalyticsDestination from "./googleAnalytics"
 import webhookDestination from "./webhook"
 import amplitudeDestination from "./amplitude"
+import customerIODestination from "./customerio"
 import hubspotDestination from "./hubspot"
 import dbtcloudDestination from "./dbtcloud"
 import s3Destination from "./s3"
@@ -31,6 +32,7 @@ export {
   googleAnalyticsDestination,
   webhookDestination,
   amplitudeDestination,
+  customerIODestination,
   hubspotDestination,
   dbtcloudDestination,
   s3Destination,
@@ -51,6 +53,7 @@ export const destinationsReferenceMap = {
   google_analytics: googleAnalyticsDestination,
   webhook: webhookDestination,
   amplitude: amplitudeDestination,
+  customerio: customerIODestination,
   hubspot: hubspotDestination,
   dbtcloud: dbtcloudDestination,
   s3: s3Destination,

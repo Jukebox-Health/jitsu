@@ -161,6 +161,13 @@ func testDestinationConnection(config *config.DestinationConfig, globalConfigura
 		}
 		amplitudeAdapter := adapters.NewTestAmplitude(cfg)
 		return amplitudeAdapter.TestAccess()
+	case storages.CustomerIOType:
+		cfg := &adapters.CustomerIOConfig{}
+		if err := config.GetDestConfig(config.CustomerIO, cfg); err != nil {
+			return err
+		}
+		customerIOAdapter := adapters.NewTestCustomerIO(cfg)
+		return customerIOAdapter.TestAccess()
 	case storages.HubSpotType:
 		cfg := &adapters.HubSpotConfig{}
 		if err := config.GetDestConfig(config.HubSpot, cfg); err != nil {
