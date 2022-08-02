@@ -11,14 +11,15 @@ import (
 )
 
 const (
-	customerioTrackAPIURL = "https://track.customer.io/api/v1/"
+	customerEventsAPIURL = "https://track.customer.io/api/v1/customers/%v/events"
+	eventsAPIURL         = "https://track.customer.io/api/v1/events"
 )
 
 //CustomerIORequest is a dto for sending requests to CustomerIO
 type CustomerIORequest struct {
-	SiteID string                   `json:"site_id"`
-	APIKey string                   `json:"api_key"`
-	Events []map[string]interface{} `json:"events"`
+	SiteID  string                 `json:"site_id"`
+	APIKey  string                 `json:"api_key"`
+	Payload map[string]interface{} `json:"payload"`
 }
 
 //CustomerIOResponse is a dto for receiving response from CustomerIO
@@ -36,24 +37,43 @@ func newCustomerIORequestFactory(siteID, apiKey string) (HTTPRequestFactory, err
 	return &CustomerIORequestFactory{siteID: siteID, apiKey: apiKey}, nil
 }
 
-//Create returns created CustomerIO request
-//put empty array in body if object is nil (is used in test connection)
-func (arf *CustomerIORequestFactory) Create(object map[string]interface{}) (*Request, error) {
-	//empty array is required. Otherwise nil will be sent (error)
-	var eventsArr []map[string]interface{}
-	if object != nil {
-		eventsArr = append(eventsArr, object)
+func (arf *CustomerIORequestFactory) lookupCustomerIdentifier(payload map[string]interface{}) string {
+
+	keys := []string{"id", "email", "cio_id"}
+
+	for _, key := range keys {
+		if _, exists := payload[key]; exists && payload[key] != nil {
+			return fmt.Sprintf("%v", payload[key])
+		}
 	}
 
-	req := CustomerIORequest{SiteID: arf.siteID, APIKey: arf.apiKey, Events: eventsArr}
-	b, err := json.Marshal(req)
+	return ""
+}
+
+//Create returns created CustomerIO request
+//put empty array in body if object is nil (is used in test connection)
+func (arf *CustomerIORequestFactory) Create(payload map[string]interface{}) (*Request, error) {
+
+	var trackURL = eventsAPIURL
+
+	if payload == nil {
+		payload = make(map[string]interface{})
+	}
+
+	identifier := arf.lookupCustomerIdentifier(payload)
+
+	if identifier != "" {
+		trackURL = fmt.Sprintf(customerEventsAPIURL, identifier)
+	}
+
+	b, err := json.Marshal(payload)
 	if err != nil {
-		return nil, fmt.Errorf("Error marshalling CustomerIO request [%v]: %v", req, err)
+		return nil, fmt.Errorf("Error marshalling CustomerIO request [%v]: %v", payload, err)
 	}
 
 	creds := base64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("%v:%v", arf.siteID, arf.apiKey)))
 	return &Request{
-		URL:     customerioTrackAPIURL,
+		URL:     trackURL,
 		Method:  http.MethodPost,
 		Body:    b,
 		Headers: map[string]string{"Content-Type": "application/json", "Authorization": fmt.Sprintf("Basic %v", creds)},
