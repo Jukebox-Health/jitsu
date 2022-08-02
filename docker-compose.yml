@@ -6,7 +6,7 @@ networks:
 services:
   jitsu:
     container_name: jitsu
-    image: us-central1-docker.pkg.dev/jukebox-devops/jukebox/jitsu
+    image: jitsucom/jitsu
     environment:
       - REDIS_URL=redis://redis:6379
       #Retroactive users recognition can affect RAM significant. Read more about the solution https://jitsu.com/docs/other-features/retroactive-user-recognition
