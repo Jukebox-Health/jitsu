@@ -38,6 +38,7 @@ func IsConnectionError(err error) bool {
 	return strings.Contains(err.Error(), "connection refused") ||
 		strings.Contains(err.Error(), "EOF") ||
 		strings.Contains(err.Error(), "write: broken pipe") ||
+		strings.Contains(err.Error(), "read-only transaction") ||
 		strings.Contains(err.Error(), "context deadline exceeded") ||
 		strings.Contains(err.Error(), "connection reset by peer") ||
 		strings.Contains(err.Error(), "timed out") ||
@@ -70,7 +71,8 @@ func syncStoreImpl(storage Storage, overriddenDataSchema *schema.BatchHeader, ob
 		}
 
 		start := timestamp.Now()
-		if err = adapter.Insert(adapters.NewBatchInsertContext(dbSchema, flatData.GetPayload(), false, deleteConditions)); err != nil {
+		//TODO: detect when merge is not necessary (full sync) and set merge to false. Implement it in adapters
+		if err = adapter.Insert(adapters.NewBatchInsertContext(dbSchema, flatData.GetPayload(), true, deleteConditions)); err != nil {
 			return err
 		}
 		logging.Debugf("[%s] Inserted [%d] rows in [%.2f] seconds", storage.ID(), flatData.GetPayloadLen(), timestamp.Now().Sub(start).Seconds())

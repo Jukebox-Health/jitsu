@@ -3,6 +3,7 @@ package ssl
 import (
 	"context"
 	"fmt"
+	"github.com/jitsucom/jitsu/configurator/appconfig"
 	"io/ioutil"
 	"os/exec"
 	"strings"
@@ -47,6 +48,39 @@ func (e *UpdateExecutor) Schedule(interval time.Duration) {
 	})
 }
 
+func (e *UpdateExecutor) CheckDomain(domainName string) bool {
+
+	jitsuDomain := appconfig.Instance.Domain
+	if jitsuDomain[0] != '.' {
+		jitsuDomain = "." + jitsuDomain
+	}
+	if strings.HasSuffix(domainName, jitsuDomain) {
+		logging.Infof("[CheckDomain] [OK] Requested for Jitsu domain: %s", domainName)
+		return true
+	}
+
+	domainsPerProject, err := e.sslService.LoadCustomDomains()
+	if err != nil {
+		logging.SystemErrorf("[CheckDomain] [ERROR] Cannot load Custom Domains: %s", err)
+		return false
+	}
+	for _, domains := range domainsPerProject {
+		for _, domain := range domains.Domains {
+			if domain.Name == domainName {
+				if domain.Status == okStatus || domain.Status == cnameOkStatus {
+					logging.Infof("[CheckDomain] [OK] Requested for valid custom domain: %s", domainName)
+					return true
+				} else {
+					logging.Infof("[CheckDomain] [FAIL] Requested for domain not passed cname check: %s", domainName)
+					return false
+				}
+			}
+		}
+	}
+	logging.Infof("[CheckDomain] [FAIL] Requested for not existing domain: %s", domainName)
+	return false
+}
+
 func (e *UpdateExecutor) Run(ctx context.Context) error {
 	domainsPerProject, err := e.sslService.LoadCustomDomains()
 	if err != nil {
@@ -71,7 +105,7 @@ func (e *UpdateExecutor) RunForProject(ctx context.Context, projectID string) er
 
 func (e *UpdateExecutor) processProjectDomains(ctx context.Context, projectID string, domains *entities.CustomDomains) error {
 	validDomains := filterExistingCNames(domains, e.enCName)
-	updateRequired, err := updateRequired(domains, validDomains)
+	updateRequired, err := e.updateRequired(domains, validDomains)
 	if err != nil {
 		return err
 	}
@@ -111,7 +145,10 @@ func (e *UpdateExecutor) processProjectDomains(ctx context.Context, projectID st
 	return nil
 }
 
-func updateRequired(domains *entities.CustomDomains, validDomains []string) (bool, error) {
+func (e *UpdateExecutor) updateRequired(domains *entities.CustomDomains, validDomains []string) (bool, error) {
+	if len(e.enHosts) == 0 {
+		return false, nil
+	}
 	if validDomains == nil || len(validDomains) == 0 {
 		return false, nil
 	}
