@@ -145,6 +145,15 @@ type AmplitudeFormData struct {
 	APIKey string `firestore:"apiKey" json:"apiKey"`
 }
 
+//CustomerIOFormData entity is stored in main storage (Firebase/Redis)
+type CustomerIOFormData struct {
+	Mode      string `firestore:"mode" json:"mode"`
+	TableName string `firestore:"tableName" json:"tableName"`
+
+	SiteID string `firestore:"siteID" json:"siteID"`
+	APIKey string `firestore:"apiKey" json:"apiKey"`
+}
+
 //HubSpotFormData entity is stored in main storage (Firebase/Redis)
 type HubSpotFormData struct {
 	Mode      string `firestore:"mode" json:"mode"`

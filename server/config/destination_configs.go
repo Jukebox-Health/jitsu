@@ -46,6 +46,8 @@ type DestinationConfig struct {
 	//Deprecated
 	Amplitude map[string]interface{} `mapstructure:"amplitude,omitempty" json:"amplitude,omitempty" yaml:"amplitude,omitempty"`
 	//Deprecated
+	CustomerIO map[string]interface{} `mapstructure:"customerio,omitempty" json:"customerio,omitempty" yaml:"customerio,omitempty"`
+	//Deprecated
 	HubSpot map[string]interface{} `mapstructure:"hubspot,omitempty" json:"hubspot,omitempty" yaml:"hubspot,omitempty"`
 	//Deprecated
 	DbtCloud map[string]interface{} `mapstructure:"dbtcloud,omitempty" json:"dbtcloud,omitempty" yaml:"dbtcloud,omitempty"`

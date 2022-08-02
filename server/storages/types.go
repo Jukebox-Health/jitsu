@@ -1,8 +1,9 @@
 package storages
 
 import (
-	"github.com/jitsucom/jitsu/server/drivers/base"
 	"io"
+
+	"github.com/jitsucom/jitsu/server/drivers/base"
 
 	"github.com/jitsucom/jitsu/server/adapters"
 	"github.com/jitsucom/jitsu/server/events"
@@ -26,6 +27,7 @@ const (
 	NpmType             = "npm"
 	TagType             = "tag"
 	AmplitudeType       = "amplitude"
+	CustomerIOType      = "customerio"
 	HubSpotType         = "hubspot"
 	DbtCloudType        = "dbtcloud"
 )

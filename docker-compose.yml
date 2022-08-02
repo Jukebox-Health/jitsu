@@ -2,10 +2,11 @@ version: "2.3"
 networks:
   main:
 
+
 services:
   jitsu:
     container_name: jitsu
-    image: jitsucom/jitsu
+    image: us-central1-docker.pkg.dev/jukebox-devops/jukebox/jitsu
     environment:
       - REDIS_URL=redis://redis:6379
       #Retroactive users recognition can affect RAM significant. Read more about the solution https://jitsu.com/docs/other-features/retroactive-user-recognition
@@ -33,7 +34,7 @@ services:
       - ./compose-data/redis/data:/data
     restart: always
     healthcheck:
-      test: ["CMD-SHELL", "redis-cli -h localhost -p 6379 PING"]
+      test: [ "CMD-SHELL", "redis-cli -h localhost -p 6379 PING" ]
       interval: 1s
       timeout: 30s
     networks:

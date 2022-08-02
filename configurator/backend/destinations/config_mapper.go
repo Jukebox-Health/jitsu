@@ -42,6 +42,8 @@ func MapConfig(destinationID string, destination *entities.Destination, defaultS
 		config, err = mapWebhook(destination)
 	case enstorages.AmplitudeType:
 		config, err = mapAmplitude(destination)
+	case enstorages.CustomerIOType:
+		config, err = mapCustomerIO(destination)
 	case enstorages.HubSpotType:
 		config, err = mapHubSpot(destination)
 	case enstorages.DbtCloudType:
@@ -664,6 +666,37 @@ func mapAmplitude(aDestination *entities.Destination) (*enconfig.DestinationConf
 	}
 	return &enconfig.DestinationConfig{
 		Type:   enstorages.AmplitudeType,
+		Mode:   aFormData.Mode,
+		Config: cfgMap,
+		DataLayout: &enconfig.DataLayout{
+			TableNameTemplate: aFormData.TableName,
+		},
+	}, nil
+}
+
+func mapCustomerIO(aDestination *entities.Destination) (*enconfig.DestinationConfig, error) {
+	b, err := json.Marshal(aDestination.Data)
+	if err != nil {
+		return nil, fmt.Errorf("Error marshaling customerIO config destination: %v", err)
+	}
+
+	aFormData := &entities.CustomerIOFormData{}
+	err = json.Unmarshal(b, aFormData)
+	if err != nil {
+		return nil, fmt.Errorf("Error unmarshaling customerIO form data: %v", err)
+	}
+
+	cfg := &enadapters.CustomerIOConfig{
+		SiteID: aFormData.SiteID,
+		APIKey: aFormData.APIKey,
+	}
+	cfgMap := map[string]interface{}{}
+	err = mapstructure.Decode(cfg, &cfgMap)
+	if err != nil {
+		return nil, fmt.Errorf("Error marshalling cfg to map: %v", err)
+	}
+	return &enconfig.DestinationConfig{
+		Type:   enstorages.CustomerIOType,
 		Mode:   aFormData.Mode,
 		Config: cfgMap,
 		DataLayout: &enconfig.DataLayout{

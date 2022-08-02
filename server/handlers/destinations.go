@@ -51,6 +51,7 @@ func (dh *DestinationsHandler) Handler(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, middleware.ErrResponse("Failed to parse body", err))
 		return
 	}
+	logging.Errorf("Destination Config: %v", destinationConfig)
 	err := testDestinationConnection(destinationConfig, dh.userRecognition)
 	if err != nil {
 		msg := err.Error()
@@ -161,6 +162,13 @@ func testDestinationConnection(config *config.DestinationConfig, globalConfigura
 		}
 		amplitudeAdapter := adapters.NewTestAmplitude(cfg)
 		return amplitudeAdapter.TestAccess()
+	case storages.CustomerIOType:
+		cfg := &adapters.CustomerIOConfig{}
+		if err := config.GetDestConfig(config.CustomerIO, cfg); err != nil {
+			return err
+		}
+		customerIOAdapter := adapters.NewTestCustomerIO(cfg)
+		return customerIOAdapter.TestAccess()
 	case storages.HubSpotType:
 		cfg := &adapters.HubSpotConfig{}
 		if err := config.GetDestConfig(config.HubSpot, cfg); err != nil {

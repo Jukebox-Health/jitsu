@@ -5,18 +5,20 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/jitsucom/jitsu/server/logging"
-	"github.com/jitsucom/jitsu/server/oauth"
-	"github.com/jitsucom/jitsu/server/schema"
-	"github.com/spf13/viper"
 	"io"
 	"io/ioutil"
 	"strings"
 	"time"
+
+	"github.com/jitsucom/jitsu/server/logging"
+	"github.com/jitsucom/jitsu/server/oauth"
+	"github.com/jitsucom/jitsu/server/schema"
+	"github.com/spf13/viper"
 )
 
 const (
 	AmplitudeType       = "amplitude"
+	CustomerIOType      = "customerio"
 	FbMarketingType     = "facebook_marketing"
 	FirebaseType        = "firebase"
 	GoogleAnalyticsType = "google_analytics"
