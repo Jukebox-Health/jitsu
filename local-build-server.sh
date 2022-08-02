@@ -92,7 +92,7 @@ then
   echo "====================================="
   echo ""
 
-  docker buildx build --platform linux/amd64 -t jitsucom/server -f server.Dockerfile --build-arg dhid=jitsucom --build-arg SDK_VERSION=$SDK_VERSION . || { echo 'Building jitsucom/server docker failed' ; exit 1; }
+  docker build -t jitsucom/server -f server.Dockerfile --build-arg dhid=jitsucom --build-arg SDK_VERSION=$SDK_VERSION . || { echo 'Building jitsucom/server docker failed' ; exit 1; }
 fi
 
 echo ""
