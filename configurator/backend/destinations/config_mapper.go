@@ -42,6 +42,8 @@ func MapConfig(destinationID string, destination *entities.Destination, defaultS
 		config, err = mapWebhook(destination)
 	case enstorages.AmplitudeType:
 		config, err = mapAmplitude(destination)
+	case enstorages.CustomerIOType:
+		config, err = mapCustomerIO(destination)
 	case enstorages.HubSpotType:
 		config, err = mapHubSpot(destination)
 	case enstorages.DbtCloudType:
@@ -694,7 +696,7 @@ func mapCustomerIO(aDestination *entities.Destination) (*enconfig.DestinationCon
 		return nil, fmt.Errorf("Error marshalling cfg to map: %v", err)
 	}
 	return &enconfig.DestinationConfig{
-		Type:   enstorages.AmplitudeType,
+		Type:   enstorages.CustomerIOType,
 		Mode:   aFormData.Mode,
 		Config: cfgMap,
 		DataLayout: &enconfig.DataLayout{

@@ -142,7 +142,7 @@ func (a *CustomerIO) TestAccess() error {
 		return err
 	}
 
-	body := map[string]interface{}{"event_type": "connection_test", "user_id": "hello@jitsu.com"}
+	body := map[string]interface{}{"name": "connection_test", "anonymous_id": "jitsu_test_abc123"}
 	r, err := httpReqFactory.Create(body)
 	if err != nil {
 		return err

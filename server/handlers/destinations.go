@@ -51,6 +51,7 @@ func (dh *DestinationsHandler) Handler(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, middleware.ErrResponse("Failed to parse body", err))
 		return
 	}
+	logging.Errorf("Destination Config: %v", destinationConfig)
 	err := testDestinationConnection(destinationConfig, dh.userRecognition)
 	if err != nil {
 		msg := err.Error()

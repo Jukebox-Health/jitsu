@@ -5,10 +5,14 @@ function toCustomerIO($) {
 
     return {
         name: $.event_type,
+        cio_id: $.cio_id || user.cio_id,
+        id: $.id || user.cartId,
+        email: $.email || user.email,
+        anonymous_id: user.anonymous_id,
+        type: $.event_type,
         data: {
-            user_id: user.email,
-            device_id: user.anonymous_id,
-            event_type: $.event_type,
+            email: user.email,
+            anonymous_id: user.anonymous_id,
             os_name: context.parsed_ua?.os_family,
             os_version: context.parsed_ua?.os_version,
             device_brand: context.parsed_ua?.device_brand,

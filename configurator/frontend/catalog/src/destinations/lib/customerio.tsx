@@ -20,7 +20,7 @@ const customerIODestination = {
     description: (
         <>
             Jitsu can send events from JS SDK or Events API to{" "}
-            <a target="_blank" href="https://developers.amplitude.com/docs/http-api-v2>">
+            <a target="_blank" href="https://customer.io/docs/api">
                 CustomerIO API
             </a>
             . CustomerIO is an real-time analytics platform for marketers that can build dashboards to filter new users by
@@ -52,7 +52,7 @@ return toCustomerIO($)`,
             documentation: (
                 <>
                     Your CustomerIO Site ID from{" "}
-                    <a target="_blank" href="https://analytics.amplitude.com/">
+                    <a target="_blank" href="https://fly.customer.io/">
                         Project Settings
                     </a>{" "}
                     page.
@@ -67,7 +67,7 @@ return toCustomerIO($)`,
             documentation: (
                 <>
                     Your CustomerIO API Key from{" "}
-                    <a target="_blank" href="https://analytics.amplitude.com/">
+                    <a target="_blank" href="https://fly.customer.io/">
                         Project Settings
                     </a>{" "}
                     page.

@@ -47,7 +47,7 @@ echo "=    Building jitsucom/jitsu docker...     ="
 echo "============================================"
 echo ""
 
-(cd docker; docker build -t jitsucom/jitsu .) || { echo 'Building jitsucom/jitsu docker failed' ; exit 1; }
+(cd docker; docker buildx build --platform linux/amd64 -t jitsucom/jitsu .) || { echo 'Building jitsucom/jitsu docker failed' ; exit 1; }
 
 echo ""
 echo "============================================"
