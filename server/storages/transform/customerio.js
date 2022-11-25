@@ -11,6 +11,9 @@ function toCustomerIO($) {
         anonymous_id: user.anonymous_id,
         type: $.event_type,
         data: {
+            first_name: user.first_name,
+            last_name: user.last_name,
+            salesforce_id: user.salesforce_id,
             email: user.email,
             anonymous_id: user.anonymous_id,
             os_name: context.parsed_ua?.os_family,
